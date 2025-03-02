@@ -15,7 +15,7 @@ struct IgniteWebsite {
 }
 
 struct SDFSite: Site {
-    var name = "Start Develop Finish"
+    var name = "Start. Develop. Finish."
     var titleSuffix = " – Swift Blog Site"
     var url = URL(static: "https://startdevelopfin.github.io")
 
