@@ -23,18 +23,30 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      # Fix paths in HTML files, CSS, and images for the /SDFSite/ directory
       - name: Fix Paths for SDFSite
         run: |
+          # Fix href links
           grep -rl 'href="/' Build/ | xargs sed -i 's|href="/|href="/SDFSite/|g'
+          
+          # Fix src links (for images, scripts, etc.)
           grep -rl 'src="/' Build/ | xargs sed -i 's|src="/|src="/SDFSite/|g'
+          
+          # Fix CSS link paths if the styles.css is referenced at the root
+          grep -rl 'href="styles.css"' Build/ | xargs sed -i 's|href="styles.css"|href="/SDFSite/styles.css"|g'
+
+          # If you use background images or other resource URLs in CSS, also fix those
+          grep -rl 'url("/' Build/ | xargs sed -i 's|url("/|url("/SDFSite/|g'
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './Build'
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
