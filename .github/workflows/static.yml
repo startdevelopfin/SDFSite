@@ -37,6 +37,7 @@ jobs:
         run: |
           grep -rl 'href="/' Build/ | xargs sed -i 's|href="/|href="/SDFSite/|g'
           grep -rl 'src="/' Build/ | xargs sed -i 's|src="/|src="/SDFSite/|g'
+          grep -rl 'href="styles.css' Build/ | xargs sed -i 's|href="styles.css|href="/SDFSite/styles.css|g'
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
