@@ -8,15 +8,32 @@ jobs:
   build:
     runs-on: macos-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
       - name: Install Swift 6
         run: |
           sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
           swift --version  # Verify Swift 6 is being used
+      - name: Build the site
+        run: |
+          swift run  # Or your specific build command for the site generator
 
   deploy:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
       - name: Deploy to GitHub Pages
         run: |
-          # Your deployment commands here
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          
+          # Make sure you're in the correct directory and that your build folder exists
+          cd Build  # Assuming your built files are inside the Build folder
+          
+          # Add all files inside the Build folder
+          git add -A
+          git commit -m "Deploy new changes"
+          
+          # Push the changes to the 'gh-pages' branch (or whichever branch you're using for Pages)
+          git push origin HEAD:gh-pages
