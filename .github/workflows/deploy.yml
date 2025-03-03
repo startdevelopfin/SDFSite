@@ -1,3 +1,11 @@
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Install Swift 6
+        run: |
+          sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+          swift --version  # Verify Swift 6 is being used
 name: Deploy to GitHub Pages
 
 on:
@@ -5,21 +13,18 @@ on:
     branches: [ main ]  # Change to master if that's your default branch
 
 jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Install Swift 6
+        run: |
+          sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+          swift --version  # Verify Swift 6 is being used
+
   deploy:
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v3
-      with:
-        submodules: true
-    
-    - name: Setup Swift
-      uses: swift-actions/setup-swift@v1
-      
-    - name: Build site
-      run: swift run
-      
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./Output
+      - uses: actions/checkout@v3
+      - name: Deploy to GitHub Pages
+        run: |
+          # Your deployment commands here
