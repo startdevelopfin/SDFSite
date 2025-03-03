@@ -29,35 +29,10 @@ struct SDFSite: Site {
     var tagLayout = Tags()
     var layout = MainLayout()
 
-    var staticLayouts: [any StaticLayout] {
-        ContentExamples()
-        GridExamples()
-        NavigationExamples()
-        TextExamples()
-        StylingExamples()
-        ThemeExamples()
-
-        AccordionExamples()
-        AlertExamples()
-        BadgeExamples()
-        ButtonExamples()
-        CardExamples()
-        CarouselExamples()
-        CodeExamples()
-        DropdownExamples()
-        EmbedExamples()
-        ImageExamples()
-        IncludeExamples()
-        LinkExamples()
-        ListExamples()
-        ModalExamples()
-        QuoteExamples()
-        TableExamples()
-    }
-
     var articleLayouts: [any ArticleLayout] {
         Story()
         CustomStory()
     }
 }
+
 
