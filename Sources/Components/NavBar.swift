@@ -17,7 +17,7 @@ struct NavBar: HTML {
             }
             
             Dropdown("SwiftUI 100") {
-                Text(markdown: "[Week 1](/story/swiftuiweek1)")
+                Text(markdown: "[Week 1](story/swiftuiweek1)")
             }
         }
         .navigationItemAlignment(.trailing)
