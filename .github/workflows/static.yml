@@ -2,7 +2,7 @@ name: Deploy static content to Pages
 
 on:
   push:
-    branches: ["main"]  # Change this if your branch is named differently
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -27,18 +27,22 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      - name: List Build Directory Contents
+        run: ls -R Build/  # This will show if files are in the Build directory
+
       # Fix paths in HTML files and other assets (links, src)
       - name: Fix Paths for SDFSite
         run: |
-          # Fix HTML links and src paths
-          grep -rl 'href="/' Build/ | xargs sed -i 's|href="/|href="/SDFSite/|g'
-          grep -rl 'src="/' Build/ | xargs sed -i 's|src="/|src="/SDFSite/|g'
-          
-          # Fix any CSS/JS references to be relative to /SDFSite/
-          grep -rl 'href="styles.css' Build/ | xargs sed -i 's|href="styles.css|href="/SDFSite/styles.css|g'
-          
-          # Fix paths to resources like images within CSS or other files
-          grep -rl 'url("/' Build/ | xargs sed -i 's|url("/|url("/SDFSite/|g'
+          # Check if files exist before attempting to modify them
+          if [ -d "Build" ]; then
+            echo "Found Build directory"
+            grep -rl 'href="/' Build/ | xargs sed -i 's|href="/|href="/SDFSite/|g'
+            grep -rl 'src="/' Build/ | xargs sed -i 's|src="/|src="/SDFSite/|g'
+            grep -rl 'href="styles.css' Build/ | xargs sed -i 's|href="styles.css|href="/SDFSite/styles.css|g'
+            grep -rl 'url("/' Build/ | xargs sed -i 's|url("/|url("/SDFSite/|g'
+          else
+            echo "Build directory not found. Skipping path fixes."
+          fi
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
