@@ -17,7 +17,7 @@ struct IgniteWebsite {
 struct SDFSite: Site {
     var name = "Start. Develop. Finish."
     var titleSuffix = " – Swift Blog Site"
-    var url = URL(static: "https://github.com/startdevelopfin/SDFSite")
+    var url = URL(static: "https://startdevelopfin.github.io/SDFSite/")
 
     var builtInIconsEnabled = true
     var syntaxHighlighterConfiguration: SyntaxHighlighterConfiguration = .init(languages: [.swift, .python, .ruby])
