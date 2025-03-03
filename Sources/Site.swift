@@ -18,7 +18,8 @@ struct SDFSite: Site {
     var name = "Start. Develop. Finish."
     var titleSuffix = " – Swift Blog Site"
     var url = URL(static: "https://startdevelopfin.github.io/SDFSite/")
-
+    var basePath = "/SDFSite"
+    var prefixAllRelativeURLs = true
     var builtInIconsEnabled = true
     var syntaxHighlighterConfiguration: SyntaxHighlighterConfiguration = .init(languages: [.swift, .python, .ruby])
     var feedConfiguration = FeedConfiguration(mode: .full, contentCount: 20, image: .init(url: "https://www.yoursite.com/images/icon32.png", width: 32, height: 32))
