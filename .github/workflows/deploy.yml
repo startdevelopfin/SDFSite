@@ -7,22 +7,37 @@ on:
 jobs:
   build:
     runs-on: macos-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install Swift 6
+      - name: Install Swift
         run: |
-          brew install swift@6  # Ensure Swift 6 is installed
+          brew install swift  # Install the latest Swift version
           sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
-          swift --version  # Verify Swift 6 is being used
+          swift --version  # Verify the installed Swift version
 
-      - name: Build the site
+      - name: Install Ignite
         run: |
-          swift run  # Or your specific build command for the site generator
+          git clone https://github.com/twostraws/Ignite.git
+          cd Ignite
+          git checkout 0935ab8a25971f51cb95e1878fbd8e8d3defbcde
+          cd ..
+          swift build  # Ensure Ignite is built
+
+      - name: Build the site using Ignite
+        run: |
+          ignite build  # This is the command you're using to build the project
+
+      - name: Verify build output
+        run: |
+          ls -la  # List the files in the current directory to verify the output folder exists
+          ls -la output  # Change 'output' to whatever folder name contains the build output
 
   deploy:
     runs-on: macos-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -32,11 +47,13 @@ jobs:
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
 
-          # Assuming the build output is in the 'Build' folder
-          cd Build  # Navigate to your build folder (update path if different)
+          # Verify the output folder and navigate to it
+          ls -la  # List all files in the current directory
+          ls -la output  # Change 'output' to your actual output folder if it's not named 'output'
 
-          git add -A
-          git commit -m "Deploy new changes"
-          
-          # Push to the 'gh-pages' branch (or your target branch)
-          git push origin HEAD:gh-pages
+          # Navigate to the output folder where the built site is stored
+          cd output  # Make sure 'output' matches the correct folder name for your site output
+
+          git add -A  # Stage all files for commit
+          git commit -m "Deploy new changes"  # Commit the changes
+          git push origin HEAD:gh-pages  # Push the changes to the 'gh-pages' branch
