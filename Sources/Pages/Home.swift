@@ -15,23 +15,22 @@ struct Home: StaticLayout {
     var body: some HTML {
         Text("Welcome Swift enthusiasts!")
             .font(.title1)
-
-        Text("Enjoy monthly posts focused on programming and the Swift community. Be sure to check out the latest content to stay up to date. Thank you for reading.")
-            .font(.lead)
-            .padding()
-//
-//        Text("")
-//            .font(.title1)
-//
-//        List {
-//            Text(markdown: "[Mentorship](/articles/mentorship)")
-//            Text(markdown: "[Speaking Engagement](/articles/speakingengagement)")
-//            Text(markdown: "[First Conference](/articles/firstconference)")
-//            Text(markdown: "[DTC UB Coding](/articles/codingdtc)")
-//        }
-//        .listMarkerStyle(.unordered(.automatic))
         
-        Text("Latest Posts")
+        
+            Text("Enjoy a variety of posts focused on programming and the Swift community. Follow along as I use SwiftUI fundamentals to build cool apps and be sure to check out the latest content to stay up to date. Thank you for reading!")
+                .font(.lead)
+                .padding()
+        Card {
+            Carousel {
+                Slide(background: "/images/photos/CardImage3.png")
+                Slide(background: "/images/photos/CardImage2.png")
+            }
+            .carouselStyle(.crossfade)
+            
+        }
+        .cardStyle(.default)
+
+        Text("Latest")
             .font(.title2)
             .padding(.top)
         
