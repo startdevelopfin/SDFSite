@@ -2,52 +2,21 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ]  # Runs on pushes to the 'main' branch
+    branches: [ main ]  # Change to master if that's your default branch
 
 jobs:
   build:
-    runs-on: macos-14  # Uses macOS 14 runner, which has Xcode 15.3 and Swift 6
-
+    runs-on: macos-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Use Xcode 15.3 (Swift 6.0.0)
+      - name: Install Swift 6
         run: |
-          sudo xcode-select --switch /Applications/Xcode_15.3.app/Contents/Developer
+          sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
           swift --version  # Verify Swift 6 is being used
 
-      - name: Resolve dependencies
-        run: |
-          swift package resolve  # Fetch dependencies (including Ignite)
-
-      - name: Build the site using Ignite
-        run: |
-          ignite build  # Generate static site
-
-      - name: Verify build output
-        run: |
-          ls -la  # List the files in the current directory
-          ls -la Output  # Change 'Output' to the correct folder name if needed
-
   deploy:
-    runs-on: macos-14  # Ensures Swift 6.0.0 compatibility
-
+    runs-on: macos-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
+      - uses: actions/checkout@v3
       - name: Deploy to GitHub Pages
         run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-
-          # Navigate to the output folder where the built site is stored
-          ls -la  # List all files in the current directory
-          ls -la Output  # Verify correct output folder
-
-          # Ensure the correct folder is used for deployment
-          cd Output  # Update folder name if needed
-          git add -A
-          git commit -m "Deploy new changes"
-          git push origin HEAD:gh-pages
+          # Your deployment commands here
