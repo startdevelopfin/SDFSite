@@ -27,16 +27,10 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      # Fix paths in HTML files, CSS, and images for the /SDFSite/ directory
-      - name: Fix Paths for SDFSite
+      # Fix CSS paths and images if required
+      - name: Fix Paths for CSS and Images
         run: |
-          # Fix href links
-          grep -rl 'href="/' Build/ | xargs sed -i 's|href="/|href="/SDFSite/|g'
-          
-          # Fix src links (for images, scripts, etc.)
-          grep -rl 'src="/' Build/ | xargs sed -i 's|src="/|src="/SDFSite/|g'
-          
-          # Fix CSS link paths if the styles.css is referenced at the root
+          # Fix the path to styles.css if it's referenced at the root
           grep -rl 'href="styles.css"' Build/ | xargs sed -i 's|href="styles.css"|href="/SDFSite/styles.css"|g'
 
           # If you use background images or other resource URLs in CSS, also fix those
