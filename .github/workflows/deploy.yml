@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ]  # Change to master if that's your default branch
+    branches: [ main ]  # Trigger on pushes to the 'main' branch
 
 jobs:
   build:
@@ -12,28 +12,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install Swift
+      - name: Install Swift 6
         run: |
-          brew install swift  # Install the latest Swift version
-          sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+          brew install swiftenv  # Install swiftenv
+          swiftenv install 6.0.0  # Install Swift 6.0.0 using swiftenv
+          swiftenv global 6.0.0  # Set Swift 6 as the global version
           swift --version  # Verify the installed Swift version
 
-      - name: Install Ignite
+      - name: Install dependencies
         run: |
-          git clone https://github.com/twostraws/Ignite.git
-          cd Ignite
-          git checkout 0935ab8a25971f51cb95e1878fbd8e8d3defbcde
-          cd ..
-          swift build  # Ensure Ignite is built
+          swift package resolve  # Resolve and fetch project dependencies
 
       - name: Build the site using Ignite
         run: |
-          ignite build  # This is the command you're using to build the project
+          ignite build  # Build the static site
 
       - name: Verify build output
         run: |
-          ls -la  # List the files in the current directory to verify the output folder exists
-          ls -la output  # Change 'output' to whatever folder name contains the build output
+          ls -la  # List the files in the current directory
+          ls -la output  # Check if 'output' folder exists
 
   deploy:
     runs-on: macos-latest
@@ -47,13 +44,12 @@ jobs:
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
 
-          # Verify the output folder and navigate to it
-          ls -la  # List all files in the current directory
-          ls -la output  # Change 'output' to your actual output folder if it's not named 'output'
-
           # Navigate to the output folder where the built site is stored
-          cd output  # Make sure 'output' matches the correct folder name for your site output
+          ls -la  # List all files in the current directory
+          ls -la output  # Make sure the 'output' folder exists
 
+          # Navigate to the output folder and push the built site to 'gh-pages' branch
+          cd output
           git add -A  # Stage all files for commit
           git commit -m "Deploy new changes"  # Commit the changes
           git push origin HEAD:gh-pages  # Push the changes to the 'gh-pages' branch
