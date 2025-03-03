@@ -27,7 +27,7 @@ struct SDFSite: Site {
 
     var homePage = Home()
     var tagLayout = Tags()
-    var layout = MainLayout()
+    var layout = SuggestedArticleLayout()
 
     var articleLayouts: [any ArticleLayout] {
         Story()
