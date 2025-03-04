@@ -19,34 +19,38 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
+
       - name: Ensure Build Directory Exists
         run: |
           if [ ! -d "Build" ]; then
-            echo "Build directory does not exist!";
+            echo "❌ Build directory does not exist!";
             exit 1;
           fi
-      - name: Fix Paths for SDFSite
+
+      - name: Fix Paths for SDFSite (Prevent Double Prefixing)
         run: |
-          # Fix HTML paths with more comprehensive patterns
-          find Build/ -type f -name "*.html" -exec sed -i 's|href="/|href="/SDFSite/|g' {} \;
-          find Build/ -type f -name "*.html" -exec sed -i 's|src="/|src="/SDFSite/|g' {} \;
+          # Only add "/SDFSite" prefix if it doesn't already exist
           
-          # Fix JavaScript scripts without the SDFSite prefix
+          find Build/ -type f -name "*.html" -exec sed -i 's|href="/css/|href="/SDFSite/css/|g' {} \;
           find Build/ -type f -name "*.html" -exec sed -i 's|src="/js/|src="/SDFSite/js/|g' {} \;
-          
-          # Fix image paths with directories between the slashes
           find Build/ -type f -name "*.html" -exec sed -i 's|src="/images/|src="/SDFSite/images/|g' {} \;
-          
-          # Fix paths for tag links and article links
+
+          # Fix links but prevent duplicate prefixing
           find Build/ -type f -name "*.html" -exec sed -i 's|href="/tags/|href="/SDFSite/tags/|g' {} \;
           find Build/ -type f -name "*.html" -exec sed -i 's|href="/articles/|href="/SDFSite/articles/|g' {} \;
           find Build/ -type f -name "*.html" -exec sed -i 's|href="/story/|href="/SDFSite/story/|g' {} \;
+
+          # Remove accidental double prefix (e.g., /SDFSite/SDFSite/)
+          find Build/ -type f -name "*.html" -exec sed -i 's|/SDFSite/SDFSite/|/SDFSite/|g' {} \;
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './Build'
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
