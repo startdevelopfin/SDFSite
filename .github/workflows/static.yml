@@ -33,7 +33,6 @@ jobs:
       - name: Fix Paths for SDFSite (Prevent Double Prefixing)
         run: |
           # Only add "/SDFSite" prefix if it doesn't already exist
-          
           find Build/ -type f -name "*.html" -exec sed -i 's|href="/css/|href="/SDFSite/css/|g' {} \;
           find Build/ -type f -name "*.html" -exec sed -i 's|src="/js/|src="/SDFSite/js/|g' {} \;
           find Build/ -type f -name "*.html" -exec sed -i 's|src="/images/|src="/SDFSite/images/|g' {} \;
@@ -45,6 +44,10 @@ jobs:
 
           # Remove accidental double prefix (e.g., /SDFSite/SDFSite/)
           find Build/ -type f -name "*.html" -exec sed -i 's|/SDFSite/SDFSite/|/SDFSite/|g' {} \;
+
+      - name: Fix Home Link (Prevent 404 on Clicking Site Title)
+        run: |
+          find Build/ -type f -name "*.html" -exec sed -i 's|href="/"|href="/SDFSite/"|g' {} \;
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
