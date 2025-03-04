@@ -26,15 +26,22 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      - name: Ensure Build Directory Exists
+        run: |
+          if [ ! -d "Build" ]; then
+            echo "Build directory does not exist!";
+            exit 1;
+          fi
+
       - name: Fix Paths for SDFSite
         run: |
-          # Update href and src paths to include the correct base path
-          grep -rl 'href="/' Build/ | xargs sed -i 's|href="/|href="/SDFSite/|g'
-          grep -rl 'src="/' Build/ | xargs sed -i 's|src="/|src="/SDFSite/|g'
-
-          # Fix paths for CSS and JS if they are absolute
-          grep -rl 'href="css/' Build/ | xargs sed -i 's|href="css/|href="/SDFSite/css/|g'
-          grep -rl 'src="js/' Build/ | xargs sed -i 's|src="js/|src="/SDFSite/js/|g'
+          # Ensure there's content to process before using sed
+          find Build/ -type f -name "*.html" -exec sed -i 's|href="/|href="/SDFSite/|g' {} \;
+          find Build/ -type f -name "*.html" -exec sed -i 's|src="/|src="/SDFSite/|g' {} \;
+          
+          # Fix CSS and JS paths if they exist
+          find Build/ -type f -name "*.html" -exec sed -i 's|href="css/|href="/SDFSite/css/|g' {} \;
+          find Build/ -type f -name "*.html" -exec sed -i 's|src="js/|src="/SDFSite/js/|g' {} \;
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
