@@ -25,12 +25,22 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
-
       - name: Fix Paths for SDFSite
         run: |
+          # Fix absolute paths with leading slash
           grep -rl 'href="/' Build/ | xargs sed -i 's|href="/|href="/SDFSite/|g'
           grep -rl 'src="/' Build/ | xargs sed -i 's|src="/|src="/SDFSite/|g'
-
+          
+          # Fix URL paths in CSS files (for background images, etc.)
+          find Build/ -name "*.css" -exec sed -i 's|url(/|url(/SDFSite/|g' {} \;
+          
+          # Fix any asset paths in JS files
+          find Build/ -name "*.js" -exec sed -i 's|"/assets/|"/SDFSite/assets/|g' {} \;
+          
+          # Add base path to index.html if using a SPA framework
+          if [ -f Build/index.html ]; then
+            sed -i 's|<head>|<head>\n  <base href="/SDFSite/">|g' Build/index.html
+          fi
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
