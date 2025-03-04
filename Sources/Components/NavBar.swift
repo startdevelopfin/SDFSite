@@ -29,7 +29,7 @@ import Ignite
 struct NavBar: HTML {
     var body: some HTML {
         NavigationBar(logo: "Start. Develop. Finish.") {
-            Link("Start. Develop. Finish.", target: "/SDFSite/")  // Ensure it's pointing to /SDFSite/
+            Link("", target: "/SDFSite/")  // Ensure it's pointing to /SDFSite/
             
             Dropdown("App Store") {
                 Link("By Rule", target: "https://byruleapp.com")
